@@ -4,6 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="UI/UX designer in India exploring interfaces, technology, and human behavior, with a focus on automotive experiences.">
+    <meta name="google-site-verification" content="DWKEIgI3cyj8vBvNFgZSfQvM7CHkh4QGDY-Ziyw-9FQ">
   <link rel="canonical" href="https://ayaan-zen-portfolio.vercel.app/">
   <title>Ayaan Ahmad — UI/UX Designer</title>
   <meta property="og:title" content="Ayaan Ahmad — UI/UX Designer">
@@ -50,10 +51,15 @@
 document.addEventListener('DOMContentLoaded', async function boot() {
   const faviconHref = 'assets/img/favicon.svg';
   setTimeout(function() {
-    if (document.head.querySelector('link[data-yin-favicon]')) return;
-    const link = document.createElement('link');
-    link.rel = 'icon'; link.type = 'image/svg+xml'; link.href = faviconHref;
-    link.setAttribute('data-yin-favicon', ''); document.head.appendChild(link);
+    if (!document.head.querySelector('link[data-yin-favicon]')) {
+      const link = document.createElement('link');
+      link.rel = 'icon'; link.type = 'image/svg+xml'; link.href = faviconHref;
+      link.setAttribute('data-yin-favicon', ''); document.head.appendChild(link);
+    }
+    const verification = document.createElement('meta');
+    verification.name = 'google-site-verification';
+    verification.content = 'DWKEIgI3cyj8vBvNFgZSfQvM7CHkh4QGDY-Ziyw-9FQ';
+    document.head.appendChild(verification);
   }, 250);
   const loading = document.getElementById('__bundler_loading');
   function setStatus(msg) { if (loading) loading.textContent = msg; }
