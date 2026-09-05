@@ -1,3 +1,15 @@
 User-agent: *
 Allow: /
 Sitemap: https://ayaan-zen-portfolio.vercel.app/sitemap.xml
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Googlebot
+Allow: /
