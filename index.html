@@ -46,6 +46,7 @@
     }
     </script>
   <meta property="og:title" content="Ayaan Ahmad — UI/UX Designer">
+    <meta property="og:site_name" content="Ayaan Ahmad Portfolio">
   <meta property="og:description" content="UI/UX designer in India exploring interfaces, technology, and human behavior, with a focus on automotive experiences.">
   <meta property="og:image" content="https://ayaan-zen-portfolio.vercel.app/assets/img/og-image-whatsapp.jpg">
   <meta property="og:image:secure_url" content="https://ayaan-zen-portfolio.vercel.app/assets/img/og-image-whatsapp.jpg">
@@ -383,6 +384,12 @@ document.addEventListener('DOMContentLoaded', async function boot() {
     // preserve ordering (React before ReactDOM before Babel before text/babel).
     const doc = new DOMParser().parseFromString(template, 'text/html');
     document.documentElement.replaceWith(doc.documentElement);
+    if (!document.head.querySelector('meta[property="og:site_name"]')) {
+      const siteName = document.createElement('meta');
+      siteName.setAttribute('property', 'og:site_name');
+      siteName.setAttribute('content', 'Ayaan Ahmad Portfolio');
+      document.head.appendChild(siteName);
+    }
 
     // Resolve page-frame markers: mint this document's own blob for each
     // framed page — from local text when this is the root, otherwise by
