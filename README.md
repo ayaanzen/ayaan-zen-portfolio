@@ -4,7 +4,7 @@ A single-file static portfolio site for [Ayaan Ahmad](https://ayaan-zen-portfoli
 
 ## About
 
-Everything — HTML, CSS, JavaScript, fonts, and all nine images — is inlined into one self-contained `index.html` (≈ 1.6 MB). No build step, no bundler, no dependencies.
+Everything — HTML, CSS, JavaScript, fonts, and all nine images — is inlined into one self-contained `index.html` (≈ 1.2 MB). The embedded portfolio images are stored as WebP to keep the mobile download smaller. No build step, no bundler, no dependencies.
 
 ## Deployment
 
