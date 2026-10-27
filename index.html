@@ -207,6 +207,8 @@
       border-radius: 50%;
       border: 1.5px solid rgba(31, 63, 208, 0.22);
       animation: loaderOrbitRotate 2.5s linear infinite;
+      animation-fill-mode: both;
+      will-change: transform;
     }
     html.dark-theme .loader-orbit-ring {
       border-color: rgba(140, 170, 255, 0.35) !important;
@@ -245,9 +247,10 @@
       height: 72px;
       border-radius: 50%;
       filter: drop-shadow(0 4px 16px rgba(20, 19, 18, 0.18));
-      animation: loaderYinYangSpin 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite,
-                 loaderYinYangBreath 2.6s ease-in-out infinite;
+      animation: loaderYinYangSpin 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+      animation-fill-mode: both;
       transform-origin: center center;
+      will-change: transform;
     }
     html.dark-theme .loader-yin-yang {
       filter: drop-shadow(0 4px 22px rgba(0, 0, 0, 0.7)) !important;
@@ -269,17 +272,15 @@
     }
 
     @keyframes loaderYinYangSpin {
-      0% { transform: rotate(0deg); }
-      50% { transform: rotate(180deg); }
-      100% { transform: rotate(360deg); }
-    }
-    @keyframes loaderYinYangBreath {
-      0%, 100% { transform: scale(0.95); }
-      50% { transform: scale(1.05); }
+      0%   { transform: rotate(0deg) scale(0.95); }
+      25%  { transform: rotate(90deg) scale(1.02); }
+      50%  { transform: rotate(180deg) scale(1.05); }
+      75%  { transform: rotate(270deg) scale(1.02); }
+      100% { transform: rotate(360deg) scale(0.95); }
     }
     @keyframes loaderOrbitRotate {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+      0%   { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
     @keyframes loaderAuraPulse {
       0%, 100% { transform: scale(0.92); opacity: 0.45; }
@@ -371,7 +372,7 @@
   <div id="__bundler_loading" style="display:none !important"></div>
 
   <script>
-    
+    window.__loaderStartTime = Date.now();
 document.addEventListener('DOMContentLoaded', async function boot() {
   const faviconHref = 'assets/img/favicon.svg';
   setTimeout(function() {
