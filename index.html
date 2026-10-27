@@ -395,8 +395,14 @@
   <div id="__bundler_loading" style="display:none !important"></div>
 
   <script>
-    window.__loaderStartTime = Date.now();
-document.addEventListener('DOMContentLoaded', async function boot() {
+    // __loaderStartTime was already set in <head>.
+    // Hard safety net: force-dismiss loader after 8s no matter what.
+    setTimeout(function() {
+      var el = document.getElementById('app-loading-screen');
+      if (el) { el.classList.add('loader-fade-out'); setTimeout(function(){ if(el&&el.parentNode) el.parentNode.removeChild(el); }, 700); }
+    }, 8000);
+
+    async function boot() {
   const faviconHref = 'assets/img/favicon.svg';
   setTimeout(function() {
     if (!document.head.querySelector('link[data-yin-favicon]')) {
@@ -773,8 +779,20 @@ document.addEventListener('DOMContentLoaded', async function boot() {
   } catch (err) {
     setStatus('Error unpacking: ' + err.message);
     console.error('Bundle unpack error:', err);
+    var errLoader = document.getElementById('app-loading-screen');
+    if (errLoader) {
+      errLoader.classList.add('loader-fade-out');
+      setTimeout(function() { if (errLoader && errLoader.parentNode) errLoader.parentNode.removeChild(errLoader); }, 700);
+    }
   }
-});
+}
+
+// Fire boot immediately if DOMContentLoaded already fired (common on mobile).
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', boot);
+} else {
+  boot();
+}
 
   </script>
 
