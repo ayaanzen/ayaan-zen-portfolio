@@ -90,21 +90,286 @@
     gtag('js', new Date());
     gtag('config', 'G-LBRWCKFZ8Q');
   </script>
-  <style>
+  <script>
+    try {
+      var savedTheme = localStorage.getItem('zen_theme');
+      var isDark = savedTheme === 'dark' || (!savedTheme && window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      if (isDark) document.documentElement.classList.add('dark-theme');
+    } catch (e) {}
+  </script>
+  <style id="app-loading-css">
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { background: #faf9f5; display: flex; align-items: center; justify-content: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, sans-serif; }
-    #__bundler_loading { display: none !important; }
-    #__bundler_thumbnail { display: none !important; }
-    #__bundler_placeholder { color: #999; font-size: 14px; }
+    html, body {
+      background: #faf9f5;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Plus Jakarta Sans", "Segoe UI", Roboto, sans-serif;
+      overflow-x: hidden;
+    }
+    html.dark-theme, html.dark-theme body {
+      background: #141312 !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      html:not(.light-theme), html:not(.light-theme) body {
+        background: #141312;
+      }
+    }
+    script, script[type^="__bundler"] {
+      display: none !important;
+    }
+    #__bundler_loading, #__bundler_thumbnail, #__bundler_placeholder {
+      display: none !important;
+    }
+
+    /* Fullscreen Loading Screen */
+    #app-loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 2147483647;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #faf9f5;
+      color: #141312;
+      transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.65s cubic-bezier(0.16, 1, 0.3, 1),
+                  visibility 0.65s;
+      user-select: none;
+      -webkit-user-select: none;
+      pointer-events: auto;
+    }
+
+    html.dark-theme #app-loading-screen {
+      background-color: #141312 !important;
+      color: #f1efee !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      html:not(.light-theme) #app-loading-screen {
+        background-color: #141312;
+        color: #f1efee;
+      }
+    }
+
+    #app-loading-screen.loader-fade-out {
+      opacity: 0;
+      transform: scale(1.03);
+      pointer-events: none;
+      visibility: hidden;
+    }
+
+    .loader-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 28px;
+      will-change: transform, opacity;
+    }
+
+    /* Symbol Stage */
+    .loader-symbol-stage {
+      position: relative;
+      width: 110px;
+      height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Ambient Glow Aura */
+    .loader-aura {
+      position: absolute;
+      inset: -14px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(31, 63, 208, 0.22) 0%, rgba(31, 63, 208, 0.05) 55%, transparent 75%);
+      animation: loaderAuraPulse 2.8s ease-in-out infinite;
+      pointer-events: none;
+    }
+    html.dark-theme .loader-aura {
+      background: radial-gradient(circle, rgba(77, 116, 255, 0.32) 0%, rgba(77, 116, 255, 0.08) 55%, transparent 75%) !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      html:not(.light-theme) .loader-aura {
+        background: radial-gradient(circle, rgba(77, 116, 255, 0.32) 0%, rgba(77, 116, 255, 0.08) 55%, transparent 75%);
+      }
+    }
+
+    /* Orbit Ring inspired by Sketchfab Yin-Yang Animation */
+    .loader-orbit-ring {
+      position: absolute;
+      inset: 0px;
+      border-radius: 50%;
+      border: 1px dashed rgba(31, 63, 208, 0.35);
+      animation: loaderOrbitRotate 7s linear infinite;
+    }
+    html.dark-theme .loader-orbit-ring {
+      border-color: rgba(140, 170, 255, 0.35) !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      html:not(.light-theme) .loader-orbit-ring {
+        border-color: rgba(140, 170, 255, 0.35);
+      }
+    }
+
+    .loader-orbit-bead {
+      position: absolute;
+      top: -3.5px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #1f3fd0;
+      box-shadow: 0 0 10px #1f3fd0;
+    }
+    html.dark-theme .loader-orbit-bead {
+      background: #5d82ff !important;
+      box-shadow: 0 0 12px #5d82ff !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      html:not(.light-theme) .loader-orbit-bead {
+        background: #5d82ff;
+        box-shadow: 0 0 12px #5d82ff;
+      }
+    }
+
+    /* Yin Yang Core Animation */
+    .loader-yin-yang {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      filter: drop-shadow(0 4px 16px rgba(20, 19, 18, 0.18));
+      animation: loaderYinYangSpin 2.6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite,
+                 loaderYinYangBreath 2.6s ease-in-out infinite;
+      transform-origin: center center;
+    }
+    html.dark-theme .loader-yin-yang {
+      filter: drop-shadow(0 4px 22px rgba(0, 0, 0, 0.7)) !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      html:not(.light-theme) .loader-yin-yang {
+        filter: drop-shadow(0 4px 22px rgba(0, 0, 0, 0.7));
+      }
+    }
+
+    /* Adapt Yin Yang colors to dark mode */
+    html.dark-theme .loader-yin-bg { fill: #141312 !important; }
+    html.dark-theme .loader-yang-dark { fill: #f1efee !important; }
+    html.dark-theme .loader-yin-border { stroke: #f1efee !important; }
+    @media (prefers-color-scheme: dark) {
+      html:not(.light-theme) .loader-yin-bg { fill: #141312; }
+      html:not(.light-theme) .loader-yang-dark { fill: #f1efee; }
+      html:not(.light-theme) .loader-yin-border { stroke: #f1efee; }
+    }
+
+    @keyframes loaderYinYangSpin {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(180deg); }
+      100% { transform: rotate(360deg); }
+    }
+    @keyframes loaderYinYangBreath {
+      0%, 100% { transform: scale(0.95); }
+      50% { transform: scale(1.05); }
+    }
+    @keyframes loaderOrbitRotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes loaderAuraPulse {
+      0%, 100% { transform: scale(0.92); opacity: 0.45; }
+      50% { transform: scale(1.15); opacity: 0.85; }
+    }
+
+    /* Name & Brand Text */
+    .loader-text-block {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .loader-title {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.025em;
+      line-height: 1.1;
+      display: flex;
+      align-items: center;
+      gap: 0.28em;
+    }
+
+    .loader-subtitle {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      opacity: 0.65;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .loader-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #1f3fd0;
+      animation: loaderDotPulse 1.6s ease-in-out infinite;
+    }
+    html.dark-theme .loader-status-dot {
+      background: #5d82ff !important;
+    }
+    @media (prefers-color-scheme: dark) {
+      html:not(.light-theme) .loader-status-dot {
+        background: #5d82ff;
+      }
+    }
+
+    @keyframes loaderDotPulse {
+      0%, 100% { opacity: 0.35; transform: scale(0.85); }
+      50% { opacity: 1; transform: scale(1.25); }
+    }
   </style>
   <noscript>
-    <style>#__bundler_loading { display: none; }</style>
     <div style="position:fixed;bottom:12px;left:12px;font:13px/1.4 -apple-system,BlinkMacSystemFont,sans-serif;color:#999;background:rgba(255,255,255,0.9);padding:6px 12px;border-radius:6px;box-shadow:0 1px 4px rgba(0,0,0,0.08);z-index:10000;">
       This page requires JavaScript to display.
     </div>
   </noscript>
 </head>
 <body>
+  <!-- Fullscreen Brand Loading Screen -->
+  <div id="app-loading-screen" aria-label="Loading Ayaan Ahmad Portfolio">
+    <div class="loader-content">
+      <div class="loader-symbol-stage">
+        <div class="loader-aura"></div>
+        <div class="loader-orbit-ring">
+          <div class="loader-orbit-bead"></div>
+        </div>
+        <svg class="loader-yin-yang" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle class="loader-yin-bg loader-yin-border" cx="50" cy="50" r="48" fill="#f5f4f3" stroke="#0e0e0e" stroke-width="2.5"/>
+          <path class="loader-yang-dark" d="M 50 2 A 48 48 0 0 1 50 98 A 24 24 0 0 1 50 50 A 24 24 0 0 0 50 2 Z" fill="#0e0e0e"/>
+          <circle class="loader-yin-bg" cx="50" cy="74" r="7" fill="#f5f4f3"/>
+          <circle class="loader-yang-dark" cx="50" cy="26" r="7" fill="#0e0e0e"/>
+        </svg>
+      </div>
+      <div class="loader-text-block">
+        <div class="loader-title">
+          <span>Ayaan</span>
+          <span>Ahmad</span>
+        </div>
+        <div class="loader-subtitle">
+          <span class="loader-status-dot"></span>
+          <span>Communication Design · UI/UX</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="__bundler_thumbnail" style="display:none"></div>
   <div id="__bundler_loading" style="display:none !important"></div>
 
@@ -406,6 +671,15 @@ document.addEventListener('DOMContentLoaded', async function boot() {
     // createElement so they execute, awaiting onload for src scripts to
     // preserve ordering (React before ReactDOM before Babel before text/babel).
     const doc = new DOMParser().parseFromString(template, 'text/html');
+    // Seamlessly preserve the loading screen and its CSS into the swapped document
+    const loaderCss = document.getElementById('app-loading-css');
+    if (loaderCss) {
+      doc.head.appendChild(loaderCss.cloneNode(true));
+    }
+    const existingLoader = document.getElementById('app-loading-screen');
+    if (existingLoader) {
+      doc.body.insertBefore(existingLoader.cloneNode(true), doc.body.firstChild);
+    }
     document.documentElement.replaceWith(doc.documentElement);
     if (!document.head.querySelector('meta[property="og:site_name"]')) {
       const siteName = document.createElement('meta');
@@ -462,6 +736,16 @@ document.addEventListener('DOMContentLoaded', async function boot() {
     if (window.Babel && typeof window.Babel.transformScriptTags === 'function') {
       window.Babel.transformScriptTags();
     }
+    // Gracefully fade out the loading screen
+    setTimeout(function() {
+      const activeLoader = document.getElementById('app-loading-screen');
+      if (activeLoader) {
+        activeLoader.classList.add('loader-fade-out');
+        setTimeout(function() {
+          if (activeLoader && activeLoader.parentNode) activeLoader.parentNode.removeChild(activeLoader);
+        }, 700);
+      }
+    }, 450);
   } catch (err) {
     setStatus('Error unpacking: ' + err.message);
     console.error('Bundle unpack error:', err);
