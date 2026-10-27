@@ -2,8 +2,63 @@
   "framework": null,
   "buildCommand": null,
   "outputDirectory": ".",
+  "cleanUrls": true,
   "rewrites": [
-    { "source": "/sitemap.xml", "destination": "/public/sitemap.xml" },
-    { "source": "/robots.txt", "destination": "/public/robots.txt" }
+    {
+      "source": "/sitemap.xml",
+      "destination": "/public/sitemap.xml"
+    },
+    {
+      "source": "/robots.txt",
+      "destination": "/public/robots.txt"
+    },
+    {
+      "source": "/about",
+      "destination": "/about/index.html"
+    },
+    {
+      "source": "/work",
+      "destination": "/work/index.html"
+    },
+    {
+      "source": "/contact",
+      "destination": "/contact/index.html"
+    },
+    {
+      "source": "/work/byd-redesign",
+      "destination": "/work/byd-redesign/index.html"
+    },
+    {
+      "source": "/byd-redesign",
+      "destination": "/byd-redesign/index.html"
+    },
+    {
+      "source": "/work/hyundai",
+      "destination": "/work/hyundai/index.html"
+    },
+    {
+      "source": "/hyundai",
+      "destination": "/hyundai/index.html"
+    },
+    {
+      "source": "/work/ar-car-styler",
+      "destination": "/work/ar-car-styler/index.html"
+    },
+    {
+      "source": "/ar-car-styler",
+      "destination": "/ar-car-styler/index.html"
+    },
+    {
+      "source": "/work/ev-charging",
+      "destination": "/work/ev-charging/index.html"
+    },
+    {
+      "source": "/ev-charging",
+      "destination": "/ev-charging/index.html"
+    },
+    {
+      "source": "/((?!assets/|public/|.*\\.[\\w]+$).*)",
+      "destination": "/index.html"
+    }
   ]
 }

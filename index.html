@@ -1,6 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script>
+    (function() {
+      var p = (window.location.pathname || '').replace(/^\/+|\/+$/g, '');
+      if (p && !window.location.hash) {
+        var map = {
+          'about': '#about',
+          'work': '#work',
+          'contact': '#contact',
+          'work/byd-redesign': '#byd-redesign',
+          'byd-redesign': '#byd-redesign',
+          'work/hyundai': '#hyundai',
+          'hyundai': '#hyundai',
+          'work/ar-car-styler': '#ar-car-styler',
+          'ar-car-styler': '#ar-car-styler',
+          'work/ev-charging': '#ev-charging',
+          'ev-charging': '#ev-charging'
+        };
+        if (map[p]) {
+          window.location.replace('/' + map[p]);
+        }
+      }
+    })();
+  </script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="Ayaan Ahmad is a UI/UX Designer in India exploring interfaces, technology, and human behaviour, with a focus on automotive experiences.">
