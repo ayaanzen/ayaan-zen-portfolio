@@ -1,6 +1,6 @@
 # Ayaan Ahmad — Portfolio
 
-A single-file static portfolio site for [Ayaan Ahmad](https://ayaan-zen-portfolio.vercel.app/), a communication designer.
+A single-file static portfolio site for [Ayaan Ahmad](https://ayaanzen.vercel.app/), a communication designer.
 
 ## About
 
@@ -10,7 +10,7 @@ Everything — HTML, CSS, JavaScript, fonts, and all nine images — is inlined 
 
 The site is deployed on [Vercel](https://vercel.com) with the **Other** framework preset. Vercel serves the repo root as-is with no install or build commands.
 
-**Live:** [ayaan-zen-portfolio.vercel.app](https://ayaan-zen-portfolio.vercel.app/)
+**Live:** [ayaanzen.vercel.app](https://ayaanzen.vercel.app/)
 
 ## Local Preview
 

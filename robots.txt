@@ -1,0 +1,24 @@
+User-agent: *
+Allow: /
+Allow: /assets/
+Allow: /assets/img/
+Sitemap: https://ayaanzen.vercel.app/sitemap.xml
+
+User-agent: Googlebot
+Allow: /
+Allow: /assets/
+Allow: /assets/img/
+
+User-agent: Googlebot-Image
+Allow: /
+Allow: /assets/
+Allow: /assets/img/
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
