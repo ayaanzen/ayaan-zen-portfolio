@@ -391,6 +391,116 @@
       This page requires JavaScript to display.
     </div>
   </noscript>
+
+<script id="yin-scroll-init">
+(function(){
+  'use strict';
+  var STYLE_ID = 'yin-scroll-css';
+  var DIV_ID   = 'yin-scroll';
+  var initialized = false;
+
+  function inject() {
+    if (initialized) return;
+    if (!document.body) return;
+    // Don't inject if element already exists
+    if (document.getElementById(DIV_ID)) { initialized = true; return; }
+
+    initialized = true;
+
+    // --- CSS ---
+    if (!document.getElementById(STYLE_ID)) {
+      var s = document.createElement('style');
+      s.id = STYLE_ID;
+      s.textContent =
+        '#yin-scroll{position:fixed;right:24px;bottom:24px;width:38px;height:38px;' +
+        'opacity:0;transition:opacity .3s ease;' +
+        'filter:drop-shadow(0 3px 8px rgba(0,0,0,.22));will-change:transform,opacity;}' +
+        '#yin-scroll svg{width:100%;height:100%;}' +
+        '.yin-scroll-bg{fill:#f5f4f3}.yin-scroll-dark{fill:#0e0e0e}.yin-scroll-border{stroke:#0e0e0e}' +
+        'html.dark-theme .yin-scroll-bg{fill:#141312}' +
+        'html.dark-theme .yin-scroll-dark{fill:#f1efee}' +
+        'html.dark-theme .yin-scroll-border{stroke:#f1efee}' +
+        '@media(prefers-color-scheme:dark){' +
+          'html:not(.light-theme) .yin-scroll-bg{fill:#141312}' +
+          'html:not(.light-theme) .yin-scroll-dark{fill:#f1efee}' +
+          'html:not(.light-theme) .yin-scroll-border{stroke:#f1efee}}';
+      document.head.appendChild(s);
+    }
+
+    // --- SVG Element ---
+    var div = document.createElement('div');
+    div.id = DIV_ID;
+    div.setAttribute('aria-hidden','true');
+    div.innerHTML =
+      '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' +
+        '<circle class="yin-scroll-bg yin-scroll-border" cx="50" cy="50" r="48" stroke-width="2.5"/>' +
+        '<path class="yin-scroll-dark" d="M 50 2 A 48 48 0 0 1 50 98 A 24 24 0 0 1 50 50 A 24 24 0 0 0 50 2 Z"/>' +
+        '<circle class="yin-scroll-bg" cx="50" cy="74" r="7"/>' +
+        '<circle class="yin-scroll-dark" cx="50" cy="26" r="7"/>' +
+      '</svg>';
+    document.body.appendChild(div);
+
+    // --- Scroll Logic ---
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      div.style.display = 'none';
+      return;
+    }
+    var el = div;
+    var ticking = false;
+    function update() {
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var progress = max > 0 ? window.scrollY / max : 0;
+      el.style.transform = 'rotate(' + (progress * 360).toFixed(2) + 'deg)';
+      el.style.opacity = window.scrollY > 120 ? '1' : '0';
+      ticking = false;
+    }
+    function onScroll() {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }
+    window.addEventListener('scroll', onScroll, {passive: true});
+    window.addEventListener('resize', update);
+    update();
+  }
+
+  // Poll every 150ms. Inject once the bundler has swapped the doc and the
+  // loading screen has started fading (loader gets .loader-fade-out class
+  // roughly 2.5s after the swap, which is when real page content is visible).
+  // We also check that body has content beyond bundler/loader divs.
+  function tryInit() {
+    if (initialized) return;
+    if (!document.body) return;
+    var loader = document.getElementById('app-loading-screen');
+    // Loader has the fade-out class → swap complete, page visible
+    if (loader && loader.classList.contains('loader-fade-out')) {
+      inject(); return;
+    }
+    // Loader already removed → definitely ready
+    if (!loader) {
+      inject(); return;
+    }
+    // Fallback: body has children that aren't bundler/loader elements
+    var kids = document.body.children;
+    var realKids = 0;
+    for (var i = 0; i < kids.length; i++) {
+      var id = kids[i].id || '';
+      if (id !== 'app-loading-screen' && id !== '__bundler_thumbnail' &&
+          id !== '__bundler_loading' && kids[i].getAttribute('type') !== '__bundler/template' &&
+          kids[i].getAttribute('type') !== '__bundler/manifest') {
+        realKids++;
+      }
+    }
+    if (realKids > 2) { inject(); }
+  }
+
+  var timer = setInterval(function() {
+    tryInit();
+    if (initialized) clearInterval(timer);
+  }, 150);
+
+  // Hard fallback at 10s
+  setTimeout(function() { clearInterval(timer); inject(); }, 10000);
+})();
+</script>
 </head>
 <body>
   <!-- Fullscreen Brand Loading Screen -->
