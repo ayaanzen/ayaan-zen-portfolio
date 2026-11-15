@@ -775,6 +775,17 @@
     if (window.Babel && typeof window.Babel.transformScriptTags === 'function') {
       window.Babel.transformScriptTags();
     }
+    if (!window.__yinScrollController && document.getElementById('yin-scroll')) {
+      var yincontroller = Array.from(document.scripts).find(function(script) {
+        return script.textContent.indexOf('if (window.__yinScrollController) return;') !== -1;
+      });
+      if (yincontroller) {
+        var retry = document.createElement('script');
+        retry.textContent = yincontroller.textContent;
+        (document.body || document.documentElement).appendChild(retry);
+        retry.parentNode.removeChild(retry);
+      }
+    }
   } catch (err) {
     setStatus('Error unpacking: ' + err.message);
     console.error('Bundle unpack error:', err);
