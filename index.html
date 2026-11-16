@@ -776,15 +776,50 @@
       window.Babel.transformScriptTags();
     }
     if (!window.__yinScrollController && document.getElementById('yin-scroll')) {
-      var yincontroller = Array.from(document.scripts).find(function(script) {
-        return script.textContent.indexOf('if (window.__yinScrollController) return;') !== -1;
-      });
-      if (yincontroller) {
-        var retry = document.createElement('script');
-        retry.textContent = yincontroller.textContent;
-        (document.body || document.documentElement).appendChild(retry);
-        retry.parentNode.removeChild(retry);
+      window.__yinScrollController = true;
+      var yinFrame = false;
+      function updateYinScroll() {
+        var marker = document.getElementById('yin-scroll');
+        if (!marker) return;
+        var scrollroot = document.scrollingElement || document.documentElement || document.body;
+        var viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        var pageHeight = Math.max(scrollroot.scrollHeight, document.documentElement.scrollHeight,
+          document.body ? document.body.scrollHeight : 0);
+        var maxScroll = Math.max(0, pageHeight - viewportHeight);
+        var rawScroll = typeof window.scrollY === 'number' ? window.scrollY :
+          (window.pageYOffset || window.visualViewport && window.visualViewport.pageTop ||
+            scrollroot.scrollTop || document.documentElement.scrollTop ||
+            document.body && document.body.scrollTop || 0);
+        var scrollTop = Math.max(0, Math.min(rawScroll, maxScroll));
+        var rotation = maxScroll > 0 ? scrollTop / maxScroll * 360 : 0;
+        var degrees = rotation.toFixed(2) + 'deg';
+        document.documentElement.style.setProperty('--scroll-rot', degrees);
+        marker.style.setProperty('--scroll-rot', degrees);
+        var inner = marker.querySelector('span');
+        if (inner) inner.style.transform =
+          'translate(-50%,-50%) scale(0.380) rotate(' + (90 + rotation).toFixed(2) + 'deg)';
+        var mobile = window.matchMedia && window.matchMedia('(max-width: 767px)').matches;
+        marker.style.opacity = mobile || scrollTop > 120 ? '1' : '0';
       }
+      function scheduleYinScroll() {
+        if (yinFrame) return;
+        yinFrame = true;
+        var run = function() { yinFrame = false; updateYinScroll(); };
+        if (window.requestAnimationFrame) window.requestAnimationFrame(run);
+        else window.setTimeout(run, 16);
+      }
+      window.addEventListener('scroll', scheduleYinScroll, { passive: true });
+      document.addEventListener('scroll', scheduleYinScroll, { passive: true, capture: true });
+      document.addEventListener('touchmove', scheduleYinScroll, { passive: true, capture: true });
+      document.addEventListener('touchend', scheduleYinScroll, { passive: true, capture: true });
+      window.addEventListener('resize', scheduleYinScroll, { passive: true });
+      window.addEventListener('pageshow', scheduleYinScroll, { passive: true });
+      window.addEventListener('orientationchange', scheduleYinScroll, { passive: true });
+      if (window.visualViewport && typeof window.visualViewport.addEventListener === 'function') {
+        window.visualViewport.addEventListener('scroll', scheduleYinScroll, { passive: true });
+        window.visualViewport.addEventListener('resize', scheduleYinScroll, { passive: true });
+      }
+      updateYinScroll();
     }
   } catch (err) {
     setStatus('Error unpacking: ' + err.message);
